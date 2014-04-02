@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+require 'tco'
+
+languages = {}
+
+File.readlines('.env').each do |line|
+  values = line.split('=')
+  ENV[values[0]] = values[1]
+end
+
+puts "Downloading data from GitHub\nContacting" + " Octocats...".fg("#9ad5f3") + "\n\n"
+
+data = `curl -s -u #{ENV['GITHUB_AUTH_TOKEN']}:x-oauth-basic \
+ "https://api.github.com/user/repos?type=owner&per_page=100"`
+
+data.scan(/\"language\":\ \"([a-zA-Z\ \-]*)/) do |m|
+  languages[m[0]] ? languages[m[0]] += 1 : languages[m[0]] = 1
+end
+
+color = 'ff'
+
+languages.sort_by { |k, v| v }.reverse.map do |lang, i|
+  puts "#{lang.fg('#55' + color + '55')}: #{i}"
+  color = (color.to_i(16) - 20).to_s(16)
+end
