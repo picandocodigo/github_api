@@ -9,7 +9,8 @@ File.readlines('.env').each do |line|
   ENV[values[0]] = values[1]
 end
 
-puts "Downloading data from GitHub\nContacting" + " Octocats...".fg("#9ad5f3") + "\n\n"
+puts 'Downloading data from GitHub\nContacting' +
+'Octocats...'.fg('#9ad5f3') + "\n\n"
 
 data = `curl -s -u #{ENV['GITHUB_AUTH_TOKEN']}:x-oauth-basic \
  "https://api.github.com/user/repos?type=owner&per_page=100"`
